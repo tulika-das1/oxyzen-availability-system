@@ -3,6 +3,7 @@ package com.oxygen.managment.oxyavailibility.config;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -13,7 +14,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/resources/assets/**", "resources/assets/**").permitAll()
 		.anyRequest()
 		.authenticated().and().formLogin().loginPage("/login")
-		.permitAll();
+		.permitAll()
+		.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+		.logoutSuccessUrl("/login");
 		
 	}
 

@@ -11,7 +11,7 @@ public class LoginController {
 	@GetMapping("/login")
 	public String login() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
+		//String currentPrincipalName = authentication.getName();
 		return "index";
 	}
 		

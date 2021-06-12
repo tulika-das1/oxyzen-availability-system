@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    
+    <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
+  
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,11 +44,14 @@
 
 </head>
 <body>
+
+
+
 	 <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="/login" class="logo d-flex align-items-center">
         <img src="/resources/assets/img/logo.png" alt="">
         <span>O2</span> 
       </a>
@@ -54,9 +59,19 @@
       <nav id="navbar" class="navbar">
         <ul>
           <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#login">Login</a></li>
-          <li><a class="nav-link scrollto" href="#register">Sign up</a></li>
+          <sec:authorize access="!isAuthenticated()">
+  			<li><a class="nav-link scrollto" href="#login">Login</a></li>
+  			<li><a class="nav-link scrollto" href="#register">Sign up</a></li>
+		  </sec:authorize>
+		  
           <li><a class="nav-link scrollto" href="#about">About</a></li>
+          <sec:authorize access="isAuthenticated()">
+  			<li><a class="nav-link scrollto" href="/request">Request</a></li>
+		  </sec:authorize>
+          <sec:authorize access="isAuthenticated()">
+  			<li><a href="<c:url value="/logout" />">Logout</a></li>
+		  </sec:authorize>
+           
           
           <!-- <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
@@ -369,7 +384,7 @@
           </div>
 
           <div class="col-lg-6">
-            <img src="assets/img/features-2.png" class="img-fluid" alt="">
+            <img src="/resources/assets/img/features-2.png" class="img-fluid" alt="">
           </div>
 
         </div>
@@ -382,7 +397,7 @@
           <div class="row">
 
             <div class="col-xl-4 text-center" data-aos="fade-right" data-aos-delay="100">
-              <img src="assets/img/features-3.png" class="img-fluid p-4" alt="">
+              <img src="/resources/assets/img/features-3.png" class="img-fluid p-4" alt="">
             </div>
 
             <div class="col-xl-8 d-flex content">
@@ -459,13 +474,14 @@
          
         </header>
 
-        <div >
+         <div >
           <!-- <h3 class="text-center text-white pt-5">Login form</h3> -->
           <div class="container">
               <div id="login-row" class="row justify-content-center align-items-center">
                   <div id="login-column" class="col-md-6">
                       <div id="login-box" class="col-md-12">
-                          <form id="login-form" class="form" action="" method="post">
+                     	 <c:url value="/login" var="loginUrl"/> 
+                          <form id="login-form" class="form" action="${loginUrl}" method="post">
                               
                               <div class="form-group">
                                   <label for="username" class="text-info">Username:</label><br>
@@ -479,16 +495,52 @@
                                   <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br>
                                   <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
                               </div>
-                              <div id="register-link" class="text-right">
-                                  <a href="#" class="text-info">Register here</a>
-                              </div>
+                              <input type="hidden"                          
+       							 name="${_csrf.parameterName}"  
+        							value="${_csrf.token}"/>  
+                              
                           </form>
                       </div>
-                  </div>
+                  </div>	
               </div>
           </div>
       </div>
-
+ 
+ 
+ 
+ 
+ 
+ <%-- <c:url value="/login" var="loginUrl"/>  
+<form action="${loginUrl}" method="post">         
+    <c:if test="${param.error != null}">          
+        <p>  
+            Invalid username and password.  
+        </p>  
+    </c:if> 
+    <c:if test="${param.error == null}">          
+        <p>  
+            valid username and password.  ${pageContext.request.userPrincipal.name}
+        </p>  
+    </c:if>   
+    <c:if test="${param.logout != null}">         
+        <p>  
+            You have been logged out.  
+        </p>  
+    </c:if>  
+    <p>  
+        <label for="username">Username</label>  
+        <input type="text" id="username" name="username"/>      
+    </p>  
+    <p>  
+        <label for="password">Password</label>  
+        <input type="password" id="password" name="password"/>      
+    </p>  
+    <input type="hidden"                          
+        name="${_csrf.parameterName}"  
+        value="${_csrf.token}"/>  
+    <button type="submit" class="btn">Log in</button>  
+</form>  
+  --%>
       </div>
 
     </section><!-- End Services Section -->
@@ -558,7 +610,7 @@
             <div class="box">
               <h3 style="color: #ff0071;">Ultimate Plan</h3>
               <div class="price"><sup>$</sup>49<span> / mo</span></div>
-              <img src="assets/img/pricing-ultimate.png" class="img-fluid" alt="">
+              <img src="/resources/assets/img/pricing-ultimate.png" class="img-fluid" alt="">
               <ul>
                 <li>Aida dere</li>
                 <li>Nec feugiat nisl</li>
@@ -908,7 +960,7 @@
                   Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
                 </p>
                 <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
+                  <img src="/resources/assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
                   <h3>Saul Goodman</h3>
                   <h4>Ceo &amp; Founder</h4>
                 </div>
@@ -924,7 +976,7 @@
                   Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
                 </p>
                 <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
+                  <img src="/resources/assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
                   <h3>Sara Wilsson</h3>
                   <h4>Designer</h4>
                 </div>
@@ -940,7 +992,7 @@
                   Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
                 </p>
                 <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
+                  <img src="/resources/assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
                   <h3>Jena Karlis</h3>
                   <h4>Store Owner</h4>
                 </div>
@@ -956,7 +1008,7 @@
                   Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
                 </p>
                 <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
+                  <img src="/resources/assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
                   <h3>Matt Brandon</h3>
                   <h4>Freelancer</h4>
                 </div>
@@ -972,7 +1024,7 @@
                   Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
                 </p>
                 <div class="profile mt-auto">
-                  <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
+                  <img src="/resources/assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
                   <h3>John Larson</h3>
                   <h4>Entrepreneur</h4>
                 </div>
@@ -999,7 +1051,7 @@
           <p>Temporibus omnis officia</p>
         </header>
 
-        <div class="clients-slider swiper-container">
+<!--         <div class="clients-slider swiper-container">
           <div class="swiper-wrapper align-items-center">
             <div class="swiper-slide"><img src="assets/img/clients/client-1.png" class="img-fluid" alt=""></div>
             <div class="swiper-slide"><img src="assets/img/clients/client-2.png" class="img-fluid" alt=""></div>
@@ -1011,7 +1063,7 @@
             <div class="swiper-slide"><img src="assets/img/clients/client-8.png" class="img-fluid" alt=""></div>
           </div>
           <div class="swiper-pagination"></div>
-        </div>
+        </div> -->
       </div>
 
     </section><!-- End Clients Section -->
@@ -1030,7 +1082,7 @@
 
           <div class="col-lg-4">
             <div class="post-box">
-              <div class="post-img"><img src="assets/img/blog/blog-1.jpg" class="img-fluid" alt=""></div>
+              <div class="post-img"><img src="/resources/assets/img/blog/blog-1.jpg" class="img-fluid" alt=""></div>
               <span class="post-date">Tue, September 15</span>
               <h3 class="post-title">Eum ad dolor et. Autem aut fugiat debitis voluptatem consequuntur sit</h3>
               <a href="blog-singe.html" class="readmore stretched-link mt-auto"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
@@ -1039,7 +1091,7 @@
 
           <div class="col-lg-4">
             <div class="post-box">
-              <div class="post-img"><img src="assets/img/blog/blog-2.jpg" class="img-fluid" alt=""></div>
+              <div class="post-img"><img src="/resources/assets/img/blog/blog-2.jpg" class="img-fluid" alt=""></div>
               <span class="post-date">Fri, August 28</span>
               <h3 class="post-title">Et repellendus molestiae qui est sed omnis voluptates magnam</h3>
               <a href="blog-singe.html" class="readmore stretched-link mt-auto"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
@@ -1048,7 +1100,7 @@
 
           <div class="col-lg-4">
             <div class="post-box">
-              <div class="post-img"><img src="assets/img/blog/blog-3.jpg" class="img-fluid" alt=""></div>
+              <div class="post-img"><img src="/resources/assets/img/blog/blog-3.jpg" class="img-fluid" alt=""></div>
               <span class="post-date">Mon, July 11</span>
               <h3 class="post-title">Quia assumenda est et veritatis aut quae</h3>
               <a href="blog-singe.html" class="readmore stretched-link mt-auto"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
@@ -1173,7 +1225,7 @@
         <div class="row gy-4">
           <div class="col-lg-5 col-md-12 footer-info">
             <a href="index.html" class="logo d-flex align-items-center">
-              <img src="assets/img/logo.png" alt="">
+              <img src="/resources/assets/img/logo.png" alt="">
               <span>FlexStart</span>
             </a>
             <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>

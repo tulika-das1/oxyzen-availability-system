@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
+    <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +12,12 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
  <body>
- 	
+ 	<sec:authorize access="!isAuthenticated()">
+  Login
+</sec:authorize>
+<sec:authorize access="isAuthenticated()">
+  Logout
+</sec:authorize>
 	<!--    <div id="login">
         <h3 class="text-center text-white pt-5">Login form</h3>
         <div class="container">
@@ -48,7 +54,12 @@
         <p>  
             Invalid username and password.  
         </p>  
-    </c:if>  
+    </c:if> 
+    <c:if test="${param.error == null}">          
+        <p>  
+            valid username and password.  ${pageContext.request.userPrincipal.name}
+        </p>  
+    </c:if>   
     <c:if test="${param.logout != null}">         
         <p>  
             You have been logged out.  
