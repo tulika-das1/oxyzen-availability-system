@@ -9,7 +9,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.stereotype.Repository;
 
+import com.oxygen.managment.oxyavailibility.BCRYPTTest;
 import com.oxygen.managment.oxyavailibility.pojo.CustomUser;
+import com.oxygen.managment.oxyavailibility.pojo.LoginPojo;
 
 @Repository
 public class LoginDao {
@@ -55,5 +57,30 @@ JdbcTemplate jdbcTemplate;
 		//return null;
 		
 	}
+	
+	
+	
+	public void registerUser(LoginPojo loginData) {
+		String registerUserQuery=DaoQueryBuilder.REGISTER_USER_TO_USER_TABlE;
+		String grantUserAccessQuery = DaoQueryBuilder.GRANT_ACCESS_TO_REGISTERED_USER;
+		
+		
+		
+		//encrypt password
+		String encryptedPassword = BCRYPTTest.encryptData(loginData.getPassword());
+		
+		String askedForAdminRights = loginData.isAskedForAdminRights()== true ? "Y":"N";
+		
+		int userdataInserted = jdbcTemplate.update(registerUserQuery,new Object[]{ loginData.getName(),loginData.getUserId(),encryptedPassword,askedForAdminRights});
+		int grantUserAccessGiven = 0;
+		if(userdataInserted>0) {
+			 grantUserAccessGiven = jdbcTemplate.update(grantUserAccessQuery,new Object[]{loginData.getUserId(),"ROLE_USER"});
+		}
+		
+	    System.out.println(grantUserAccessGiven);
+	    System.out.println(userdataInserted);
+		
+	}
+	
 
 }

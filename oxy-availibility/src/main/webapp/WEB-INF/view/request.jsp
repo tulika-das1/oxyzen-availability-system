@@ -75,13 +75,13 @@
 
 			<nav id="navbar" class="navbar">
 				<ul>
-					<li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+					<li><a class="nav-link scrollto active" href="/login">Home</a></li>
 					<sec:authorize access="!isAuthenticated()">
 						<li><a class="nav-link scrollto" href="#login">Login</a></li>
 						<li><a class="nav-link scrollto" href="#register">Sign up</a></li>
 					</sec:authorize>
 
-					<li><a class="nav-link scrollto" href="#about">About</a></li>
+					<!-- <li><a class="nav-link scrollto" href="#about">About</a></li> -->
 					<sec:authorize access="isAuthenticated()">
 						<li><a href="<c:url value="/logout" />">Logout</a></li>
 					</sec:authorize>
@@ -104,7 +104,7 @@
               <li><a href="#">Drop Down 4</a></li>
             </ul>
           </li> -->
-					<li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+					<!-- <li><a class="nav-link scrollto" href="#contact">Contact</a></li> -->
 					<!-- <li><a class="getstarted scrollto" href="#about">Get Started</a></li> -->
 				</ul>
 				<i class="bi bi-list mobile-nav-toggle"></i>
@@ -141,6 +141,7 @@
 								<th>Cylinder Count</th>
 								<th>Request date</th>
 								<th>Requested by</th>
+								<th>Request Status</th>
 								<th>Actions</th>
 
 

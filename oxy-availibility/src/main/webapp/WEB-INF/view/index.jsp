@@ -7,19 +7,19 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Oxygen Availability System</title>
 <meta charset="utf-8">
-  
-
-  <title>Oxygen Management System</title>
   <meta content="" name="description">
 
   <meta content="" name="keywords">
   
+  <meta name="_csrf" content="${_csrf.token}"/>
+  <meta name="_csrf_header" content="${_csrf.headerName}"/>
+  
   
 
   <!-- Favicons -->
-  <link href="/resources/assets/img/favicon.png" rel="icon">
+  <!-- <link href="/resources/assets/img/favicon.png" rel="icon"> -->
   <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon"> 
 
   <!-- Google Fonts -->
@@ -35,6 +35,7 @@
 
   <!-- Template Main CSS File -->
   <link href="/resources/assets/css/style.css" rel="stylesheet">
+  <script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
   
 
   <!-- =======================================================
@@ -60,20 +61,29 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+         <!--  <li><a class="nav-link scrollto active" href="#hero">Home</a></li> -->
           <sec:authorize access="!isAuthenticated()">
   			<li><a class="nav-link scrollto" href="#login">Login</a></li>
   			<li><a class="nav-link scrollto" href="#register">Sign up</a></li>
 		  </sec:authorize>
 		  
-          <li><a class="nav-link scrollto" href="#about">About</a></li>
+          
           <sec:authorize access="isAuthenticated()">
   			<li><a class="nav-link scrollto" href="/request">Request</a></li>
 		  </sec:authorize>
           <sec:authorize access="isAuthenticated()">
-  			<li><a href="<c:url value="/logout" />">Logout</a></li>
+  			
+  			<sec:authorize access="hasRole('ADMIN')">
+    			<li><a href="<c:url value="/admin_page" />">Approve Request</a></li>
+			</sec:authorize>
+			
 		  </sec:authorize>
-           
+          <li><a class="nav-link scrollto" href="#about">About</a></li>
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          
+          <sec:authorize access="isAuthenticated()">
+          	<li><a href="<c:url value="/logout" />">Logout</a></li>
+          </sec:authorize>
           
           <!-- <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
@@ -92,7 +102,7 @@
               <li><a href="#">Drop Down 4</a></li>
             </ul>
           </li> -->
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          
           <!-- <li><a class="getstarted scrollto" href="#about">Get Started</a></li> -->
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
@@ -100,7 +110,18 @@
 
     </div>
   </header><!-- End Header -->
-
+  
+  <c:if test="${param.error != null}"> 
+  	<section  class="d-flex">
+ 	<div class="container">
+      <div class="row">
+      	<h5  >Invalid username and password provided</h5>
+      </div>
+      </div>
+ </section>
+  	         
+    </c:if> 
+ 
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="hero d-flex align-items-center">
 
@@ -491,10 +512,11 @@
                               </div>
                               <div class="form-group">
                                   <label for="password" class="text-info">Password:</label><br>
-                                  <input type="text" name="password" id="password" class="form-control">
+                                  <input type="password" name="password" id="password" class="form-control">
                               </div>
                               <div class="form-group">
-                                  <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br>
+                                  <!-- <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br> -->
+                                  <br>
                                   <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
                               </div>
                               <input type="hidden"                          
@@ -507,9 +529,6 @@
               </div>
           </div>
       </div>
- 
- 
- 
  
  
  <%-- <c:url value="/login" var="loginUrl"/>  
@@ -758,28 +777,38 @@
                             <form id="register-form" class="form" action="" method="post">
 
                               <div class="form-group">
-                                <label for="username" class="text-info">Username:</label><br>
-                                <input type="text" name="username" id="username" class="form-control">
+                                <label for="username" class="text-info">Name:</label><br>
+                                <input type="text" name="username" id="name_register" class="form-control">
                               </div>
 
                               <div class="form-group">
                                 <label for="phone" class="text-info">Phone No:</label><br>
-                                <input type="text" name="phone" id="phone" class="form-control">
+                                <input type="text" name="phone" id="phone_register" class="form-control">
                               </div>
+                              
+                             
                                 
                                 
                                 <div class="form-group">
                                     <label for="password" class="text-info">Password:</label><br>
-                                    <input type="text" name="password" id="password" class="form-control">
+                                    <input type="password" id="password_register" class="form-control">
                                 </div>
 
                               <div class="form-group">
                                   <label for="password" class="text-info">Re-enter Password:</label><br>
-                                  <input type="text" name="password" id="password" class="form-control">
+                                  <input  type="password" id="re_password_register" class="form-control">
                               </div>
+                              
+                               <div class="form-check">
+  								<input class="form-check-input" type="checkbox"  id="admin_req_register">
+  								<label class="text-info" for="admin_req_register">
+    								Request for admin privilege
+  								</label>
+							</div>
+                              
                               <br>
                               <div class="form-group">
-                                <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
+                                <input type="button" id = "register_button" name="submit" class="btn btn-info btn-md" value="submit">
                               </div>
                               
                             </form>

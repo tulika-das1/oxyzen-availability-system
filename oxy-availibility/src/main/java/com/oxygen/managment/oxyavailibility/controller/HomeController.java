@@ -1,12 +1,19 @@
 package com.oxygen.managment.oxyavailibility.controller;
 
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oxygen.managment.oxyavailibility.pojo.CustomUser;
@@ -25,14 +32,15 @@ public class HomeController {
 	
 	@GetMapping("/request")
 	public String request() {
-		System.out.println(reqService.getReqDao().getJdbcTemplate());
+		
 		return "request";
 		
 	}
 	
 	@CrossOrigin
 	@PostMapping("/generate_request")
-	public OxygenRequestPojo genrateRequest(@RequestBody OxygenRequestPojo req) {
+	@ResponseBody
+	public OxygenRequestPojo  genrateRequest(@RequestBody OxygenRequestPojo req) {
 		
 		req  = reqService.generateRequest(req);
 		
@@ -40,5 +48,60 @@ public class HomeController {
 		return req;
 		
 	}
+	
+	
+	@CrossOrigin
+	@DeleteMapping("/delete_request")
+	@ResponseBody
+	public int deleteRequest(@RequestBody OxygenRequestPojo req) {
+		
+		int delstatus  = reqService.deleteRequest(req);
+		
+		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return delstatus;
+		
+	}
+	
+	
+	@CrossOrigin
+	@GetMapping("/active_request")
+	@ResponseBody
+	public List<OxygenRequestPojo> getActiveRequestList() {
+		
+		List<OxygenRequestPojo> oxygenReqList  = reqService.activeOxygenRequest();
+		System.out.println(oxygenReqList.get(0).getRequestDate());
+		
+		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return oxygenReqList;
+		
+	}
+	
+	@CrossOrigin
+	@PostMapping("/update_request")
+	@ResponseBody
+	public OxygenRequestPojo updateRequest( @RequestBody OxygenRequestPojo req) {
+		System.out.println("before calling db");
+		OxygenRequestPojo oxygenReq  = reqService.updateOxygenRequest(req);
+		
+		
+		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return req;
+		
+	}
+	
+	
+	
+	
+	@CrossOrigin
+	@GetMapping("/admin_page")
+	public String showAdminPage() {
+		System.out.println("Show Admin page");
+		
+		
+		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return "admin_req_approval";
+		
+	}
+	
 	
 }

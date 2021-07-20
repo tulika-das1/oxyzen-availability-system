@@ -8,13 +8,29 @@ public class OxygenRequestPojo {
 	public String toString() {
 		return "OxygenRequestPojo [cylinderRequestNo=" + cylinderRequestNo + ", requestDate=" + requestDate + "]";
 	}
+	private int requestId;
 	private int cylinderRequestNo;
 	private Date requestDate;
 	private String requester;
 	private int userid;
 	private boolean isDataInserted;
 	private String errorMsg;
+	private String reqStatus;
 	
+	
+	
+	public String getReqStatus() {
+		return reqStatus;
+	}
+	public void setReqStatus(String reqStatus) {
+		this.reqStatus = reqStatus;
+	}
+	public int getRequestId() {
+		return requestId;
+	}
+	public void setRequestId(int requestId) {
+		this.requestId = requestId;
+	}
 	public boolean isDataInserted() {
 		return isDataInserted;
 	}

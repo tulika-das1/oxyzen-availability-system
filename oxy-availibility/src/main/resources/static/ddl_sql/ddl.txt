@@ -32,4 +32,7 @@ CREATE TABLE oxy_avail.oaa_authorities (
 );
  
  CREATE UNIQUE INDEX ix_auth_mobileno on oxy_avail.oaa_authorities (oaa_mobileno,oaa_authority);
+ 
+ ALTER TABLE `oxy_avail`.`oau_users` 
+ADD COLUMN `oau_admin_prev_asked` VARCHAR(10) NULL AFTER `enabled`;
   

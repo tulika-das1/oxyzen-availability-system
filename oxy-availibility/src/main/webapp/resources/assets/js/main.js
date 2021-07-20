@@ -289,3 +289,80 @@
 
 })();
 
+$(document).ready(function(){
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$(document).ajaxSend(function(e, xhr, options) {
+		xhr.setRequestHeader(header, token);
+	})
+	
+	
+	$("#register_button").click(function(){
+		
+		let name = $("#name_register").val();
+		let mobileNo = $("#phone_register").val();
+		let password = $("#password_register").val();
+		let reEnteredPassword = $("#re_password_register").val();
+		let adminAccessAsked = false;
+		
+		
+		
+		if ($('#admin_req_register').is(":checked"))
+		{
+			adminAccessAsked = true;
+		}
+		
+		if(name == "" || name === undefined || name ==null ){
+			alert("name field can't be blank");
+			return ;
+		}
+		
+		
+		
+		if(mobileNo == "" || mobileNo === undefined || mobileNo ==null){
+			alert("Phone No field can't be blank");
+			return ;
+		}
+		if(password == "" || password === undefined || password ==null ){
+			alert("Password field can't be blank");
+			return ;
+		}
+		
+		
+		if(reEnteredPassword == "" || reEnteredPassword === undefined || reEnteredPassword ==null){
+			alert("Please re-enter the password ");
+			return ;
+		}
+		
+		
+		if(password != reEnteredPassword ){
+			alert("Please re-enter the same password provided");
+			return ;
+		}
+		
+		let data = {"name":name,"userId":mobileNo,"password":password,"askedForAdminRights":adminAccessAsked}
+		
+		//ajax call
+		$.ajax({
+			type : "POST",
+			url : '/register_user',
+			contentType : "application/json",
+			Accept : "application/json",
+			data : JSON.stringify(data),
+			success : function(response) {
+
+				alert("update success");
+				console.log(response);
+
+			},
+			error : function() {
+				alert("not working");
+			}
+		});
+		
+		
+		
+	});
+})
+

@@ -1,5 +1,7 @@
 package com.oxygen.managment.oxyavailibility.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,19 @@ public class OxygenRequestService {
 		
 		return reqDao.generateRequest(req);
 		
+	}
+	
+	public int deleteRequest(OxygenRequestPojo req) {
+		
+		return reqDao.deleteRequest(req);
+	}
+	
+	public List<OxygenRequestPojo> activeOxygenRequest(){
+		return reqDao.getActiveRequestList();
+	}
+	
+	public OxygenRequestPojo updateOxygenRequest(OxygenRequestPojo req){
+		return reqDao.updateRequest(req);
 	}
 
 }
