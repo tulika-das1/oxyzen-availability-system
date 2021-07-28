@@ -1,6 +1,7 @@
 package com.oxygen.managment.oxyavailibility.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oxygen.managment.oxyavailibility.pojo.CustomUser;
 import com.oxygen.managment.oxyavailibility.pojo.OxygenRequestPojo;
 import com.oxygen.managment.oxyavailibility.service.OxygenRequestService;
+import com.oxygen.managment.oxyavailibility.utility.ApplicationConstant;
 
 @Controller
 public class HomeController {
@@ -41,10 +43,19 @@ public class HomeController {
 	@PostMapping("/generate_request")
 	@ResponseBody
 	public OxygenRequestPojo  genrateRequest(@RequestBody OxygenRequestPojo req) {
+		if(req.isStockIncreaseRequest()) {
+			req.setReqStatus(ApplicationConstant.REQ_STATUS_STOCK_ADD);
+			
+		}else {
+			req.setReqStatus(ApplicationConstant.REQ_STATUS_NOT_APPROVED);
+			req.setStockIncreaseComment(ApplicationConstant.NOT_APPLICABLE);
+			
+		}
 		
 		req  = reqService.generateRequest(req);
 		
 		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
 		return req;
 		
 	}
@@ -69,9 +80,17 @@ public class HomeController {
 	public List<OxygenRequestPojo> getActiveRequestList() {
 		
 		List<OxygenRequestPojo> oxygenReqList  = reqService.activeOxygenRequest();
-		System.out.println(oxygenReqList.get(0).getRequestDate());
+		
 		
 		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if(user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(ApplicationConstant.ROLE_ADMIN))) {
+			
+		}else {
+			oxygenReqList = oxygenReqList.stream().filter(elem -> elem.getUserid() == user.getId()).collect(Collectors.toList());
+		}
+		
+		
 		return oxygenReqList;
 		
 	}
@@ -80,7 +99,7 @@ public class HomeController {
 	@PostMapping("/update_request")
 	@ResponseBody
 	public OxygenRequestPojo updateRequest( @RequestBody OxygenRequestPojo req) {
-		System.out.println("before calling db");
+		
 		OxygenRequestPojo oxygenReq  = reqService.updateOxygenRequest(req);
 		
 		
@@ -103,5 +122,20 @@ public class HomeController {
 		
 	}
 	
+	
+
+	
+	@CrossOrigin
+	@PutMapping("/req_updation_by_admin")
+	@ResponseBody
+	public OxygenRequestPojo updateRequestStatus(@RequestBody OxygenRequestPojo req) {
+		
+		req  = reqService.updateRequestStatus(req);
+		
+		
+		CustomUser user = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return req;
+		
+	}
 	
 }

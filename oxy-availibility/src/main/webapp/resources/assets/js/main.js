@@ -301,7 +301,7 @@ $(document).ready(function(){
 	$("#register_button").click(function(){
 		
 		let name = $("#name_register").val();
-		let mobileNo = $("#phone_register").val();
+		let emailId = $("#phone_register").val();
 		let password = $("#password_register").val();
 		let reEnteredPassword = $("#re_password_register").val();
 		let adminAccessAsked = false;
@@ -320,9 +320,16 @@ $(document).ready(function(){
 		
 		
 		
-		if(mobileNo == "" || mobileNo === undefined || mobileNo ==null){
+		if(emailId == "" || emailId === undefined || emailId ==null){
 			alert("Phone No field can't be blank");
 			return ;
+		}else{
+			let isEmailValid = validateEmail(emailId);
+			if(isEmailValid == false){
+				alert("invalid email format provided");
+				$("#phone_register").focus();
+				return ;
+			}
 		}
 		if(password == "" || password === undefined || password ==null ){
 			alert("Password field can't be blank");
@@ -341,7 +348,7 @@ $(document).ready(function(){
 			return ;
 		}
 		
-		let data = {"name":name,"userId":mobileNo,"password":password,"askedForAdminRights":adminAccessAsked}
+		let data = {"name":name,"userId":emailId,"password":password,"askedForAdminRights":adminAccessAsked}
 		
 		//ajax call
 		$.ajax({
@@ -352,10 +359,18 @@ $(document).ready(function(){
 			data : JSON.stringify(data),
 			success : function(response) {
 
-				alert("update success");
+				
 				console.log(response);
+				
+				$("#register header").append("<h3>Registration successful for User :" + response.userId+
+						"</h3>");
+				 $("#name_register").val("");
+				 $("#phone_register").val("");
+				 $("#password_register").val("");
+				 $("#re_password_register").val("");
+				
 
-			},
+			}, 
 			error : function() {
 				alert("not working");
 			}
@@ -366,3 +381,33 @@ $(document).ready(function(){
 	});
 })
 
+$("#login-form").submit(function(e){
+	if($("#username").val()==""){
+		
+		$("#error_msg1").text("** The username must be provided.");
+		$("#error_msg1").css('color','red');
+		e.preventDefault();
+	}else{
+		let isValid = validateEmail($("#username").val());
+		if(isValid == false){
+			$("#error_msg1").text("** Invalid email format provided.");
+			$("#error_msg1").css('color','red');
+			e.preventDefault();
+		}
+	}
+	
+	if($("#password").val()==""){
+		
+		$("#error_msg2").text("** The password must be provided.");
+		$("#error_msg2").css('color','red');
+		e.preventDefault();
+	}
+	
+        
+    });
+
+
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}

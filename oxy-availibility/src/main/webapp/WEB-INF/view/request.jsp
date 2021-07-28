@@ -8,10 +8,9 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
 <meta charset="utf-8">
-<meta name="_csrf" content="${_csrf.token}"/>
-  <meta name="_csrf_header" content="${_csrf.headerName}"/>
+<meta name="_csrf" content="${_csrf.token}" />
+<meta name="_csrf_header" content="${_csrf.headerName}" />
 
 <title>Oxygen Management System</title>
 <meta content="" name="description">
@@ -19,7 +18,7 @@
 <meta content="" name="keywords">
 
 <!-- Favicons -->
-<link href="/resources/assets/img/favicon.png" rel="icon">
+<!-- <link href="/resources/assets/img/favicon.png" rel="icon"> -->
 <link href="/resources/assets/img/apple-touch-icon.png"
 	rel="apple-touch-icon">
 
@@ -29,7 +28,7 @@
 	rel="stylesheet">
 
 <!-- Vendor CSS Files -->
- <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css"
+<link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
 <link
 	href="/resources/assets/vendor/bootstrap-icons/bootstrap-icons.css"
@@ -41,12 +40,15 @@
 	rel="stylesheet">
 <link href="/resources/assets/vendor/glightbox/css/glightbox.min.css"
 	rel="stylesheet">
-	
+
 <script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script> -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-	
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+	integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+	crossorigin="anonymous"></script>
+
 
 <!-- Template Main CSS File -->
 <link href="/resources/assets/css/style.css" rel="stylesheet">
@@ -117,21 +119,47 @@
 	<br />
 	<br />
 	<br />
-	<section>
-
-<input type = "hidden"  id = "userid" value = '<sec:authentication property="principal.id" />' >
+	<sec:authorize access="hasRole('ADMIN')">
+		<input type = "hidden" value="admin" id="user_privillege">
+	</sec:authorize>
+	<sec:authorize access="!hasRole('ADMIN')">
+		<input type = "hidden" value="user" id="user_privillege">
+	</sec:authorize>
+	
+		<div class="container">
+			<sec:authorize access="hasRole('ADMIN')">
+				<div class="alert alert-warning availability_count" role="alert">
+					 
+				</div>
+			</sec:authorize>
+			<div class="alert alert-warning no_data_found_alert" role="alert">
+				No request Data found !
+			</div>
+		</div>
 		
+		
+	<section style = "padding: 0px 0 !important">
+
+		<input type="hidden" id="userid"
+			value='<sec:authentication property="principal.id" />'>
+
 		<div class="container">
 			<div class="row gx-0">
 				<div class="col-lg-12 d-flex flex-column justify-content-center">
 					<div class="content">
 						<button class="btn btn-success" data-target="#mymodal"
-							data-toggle="modal">REQUEST FOR OXYGEN</button>
-						<br>
-						<br>
+							data-toggle="modal">
+							Request for Oxygen
+							<sec:authorize access="hasRole('ADMIN')">
+								/ Add Cylinder to Stock
+							</sec:authorize>
+						</button>
+						<br> <br>
 					</div>
 				</div>
 			</div>
+
+			
 			<div class="row gx-0">
 				<div id="con">
 					<table class="table table-bordered data-table">
@@ -139,7 +167,10 @@
 							<tr>
 
 								<th>Cylinder Count</th>
-								<th>Request date</th>
+								<th>Request <sec:authorize access="hasRole('ADMIN')">
+										/Stock Increment
+									</sec:authorize> date
+								</th>
 								<th>Requested by</th>
 								<th>Request Status</th>
 								<th>Actions</th>
@@ -163,35 +194,60 @@
 			<div class="modal-dialog modal-dialog-center">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h3 class="text-primary">Request For Oxygen</h3>
+						<h3 class="text-primary">
+							Request For Oxygen
+							<sec:authorize access="hasRole('ADMIN')">
+									/ Add Cylinder to Stock
+							</sec:authorize>
+						</h3>
 						<button type="button" class="close" data-dismiss="modal">
 							&times;</button>
 					</div>
 					<div class="modal-body">
-
+						<sec:authorize access="hasRole('ADMIN')">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox"
+									id="admin_req_increse_stock_cb"> <label
+									class="text-info" for="admin_req_increse_stock_cb">
+									Increase the stock </label>
+							</div>
+						</sec:authorize>
 
 						<div class="form-group">
 							<label for="number">Cylinder Count :</label> <span class="red">*
 								<small></small>
-							</span> <input type="number" min="1" name="" id="number" class="form-control"
-								placeholder="Enter no. of cylinders" required="">
+							</span> <input type="number" min="1" name="" id="number"
+								class="form-control" placeholder="Enter no. of cylinders"
+								required="">
 							<p id="show_error"></p>
 						</div>
-						<div class="form-group">
+						<div class="form-group req_or_stock_addition_dt">
 							<label for="datetime">Request Time :</label> <span class="red">*
 								<small></small>
-							</span> <input type="date" name="" id="datetime" class="form-control"
+							</span> <input type="date" value="" id="datetime" class="form-control"
 								placeholder="Enter the date" required="">
+
+							<!-- <input id="datepicker" > -->
 							<p id="show_error1"></p>
 						</div>
-						
-						<div class="form-group">
+
+						<div class="form-group req_or_stock_addition_by">
 							<label for="name">Requested By :</label> <span class="red">*
 								<small></small>
-							</span> <input type="text" name='' value = '<sec:authentication property="principal.displayName" />' readonly id="name" class="form-control"
-								 required="">
+							</span> <input type="text" name=''
+								value='<sec:authentication property="principal.displayName" />'
+								readonly id="name" class="form-control" required="">
 							<p id="show_error2"></p>
 						</div>
+
+						<sec:authorize access="hasRole('ADMIN')">
+							<div class="form-group stock_add_comment">
+								<label for="admin_Stock_update_comment">Add comment:</label>*
+								<textarea id="admin_Stock_update_comment" rows="5" cols="50"
+									required=""></textarea>
+								<p id="show_error3"></p>
+							</div>
+						</sec:authorize>
 
 						<div class="modal-footer">
 							<button id="req" class="btn btn-success" data-dismiss="modal">Request</button>
@@ -204,5 +260,5 @@
 			</div>
 		</div>
 	</section>
-<script  src="/resources/assets/js/request.js"></script>
+	<script src="/resources/assets/js/request.js"></script>
 </body>

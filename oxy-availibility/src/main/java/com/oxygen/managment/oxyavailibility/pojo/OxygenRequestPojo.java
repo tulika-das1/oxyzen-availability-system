@@ -16,9 +16,30 @@ public class OxygenRequestPojo {
 	private boolean isDataInserted;
 	private String errorMsg;
 	private String reqStatus;
+	private boolean stockIncreaseRequest;
+	private String stockIncreaseComment;
+	private String approvalRejectionComment;
 	
 	
 	
+	public String getApprovalRejectionComment() {
+		return approvalRejectionComment;
+	}
+	public void setApprovalRejectionComment(String approvalRejectionComment) {
+		this.approvalRejectionComment = approvalRejectionComment;
+	}
+	public boolean isStockIncreaseRequest() {
+		return stockIncreaseRequest;
+	}
+	public void setStockIncreaseRequest(boolean stockIncreaseRequest) {
+		this.stockIncreaseRequest = stockIncreaseRequest;
+	}
+	public String getStockIncreaseComment() {
+		return stockIncreaseComment;
+	}
+	public void setStockIncreaseComment(String stockIncreaseComment) {
+		this.stockIncreaseComment = stockIncreaseComment;
+	}
 	public String getReqStatus() {
 		return reqStatus;
 	}

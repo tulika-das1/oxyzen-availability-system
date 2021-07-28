@@ -507,12 +507,14 @@
                           <form id="login-form" class="form" action="${loginUrl}" method="post">
                               
                               <div class="form-group">
-                                  <label for="username" class="text-info">Username:</label><br>
+                                  <label for="username" class="text-info">Email id</label><br>
                                   <input type="text" name="username" id="username" class="form-control">
+                                  <p id = "error_msg1"></p>
                               </div>
                               <div class="form-group">
                                   <label for="password" class="text-info">Password:</label><br>
                                   <input type="password" name="password" id="password" class="form-control">
+                                  <p id = "error_msg2"></p>
                               </div>
                               <div class="form-group">
                                   <!-- <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br> -->
@@ -782,7 +784,7 @@
                               </div>
 
                               <div class="form-group">
-                                <label for="phone" class="text-info">Phone No:</label><br>
+                                <label for="phone" class="text-info">Email id:</label><br>
                                 <input type="text" name="phone" id="phone_register" class="form-control">
                               </div>
                               

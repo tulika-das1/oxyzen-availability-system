@@ -20,11 +20,11 @@ public class RegistrationService {
 		this.loginDao = loginDao;
 	}
 	
-	public void registerUser(LoginPojo loginData) {
+	public LoginPojo registerUser(LoginPojo loginData) {
 		
-		loginDao.registerUser(loginData);
+		return loginDao.registerUser(loginData);
 		
-		
+		 
 	}
 
 }

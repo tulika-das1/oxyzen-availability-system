@@ -11,7 +11,21 @@ public class LoginPojo {
 	String userId;
 	String password;
 	boolean askedForAdminRights;
+	String errorMsg;
+	private boolean isDataInserted;
 	
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
+	public boolean isDataInserted() {
+		return isDataInserted;
+	}
+	public void setDataInserted(boolean isDataInserted) {
+		this.isDataInserted = isDataInserted;
+	}
 	public String getName() {
 		return name;
 	}

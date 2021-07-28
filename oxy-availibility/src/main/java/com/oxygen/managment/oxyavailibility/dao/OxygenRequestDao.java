@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.oxygen.managment.oxyavailibility.pojo.CustomUser;
 import com.oxygen.managment.oxyavailibility.pojo.OxygenRequestPojo;
+import com.oxygen.managment.oxyavailibility.utility.ApplicationConstant;
 
 @Repository
 public class OxygenRequestDao {
@@ -40,7 +41,8 @@ public class OxygenRequestDao {
 		
 	        
 	        int  i = jdbcTemplate.update(query,
-				new Object[]{req.getUserid(),req.getCylinderRequestNo(),date}
+				new Object[]{req.getUserid(),req.getCylinderRequestNo(),date,
+						req.getReqStatus(),req.getStockIncreaseComment()}
 				);
 	        
 		 query = DaoQueryBuilder.GET_GENERATED_REQUEST_ID;
@@ -78,6 +80,7 @@ public class OxygenRequestDao {
 			int noOfCylider = rs.getInt("OAR_CYLINDER_NO");
 			String reqStatus = rs.getString("OAR_APPROVAL_STATE");
 			Date reqDate = rs.getDate("OAR_REQ_DATE");
+			int userId = rs.getInt("OAR_USERID");
 			/////
 			OxygenRequestPojo dto = new OxygenRequestPojo();
 			dto.setCylinderRequestNo(noOfCylider);
@@ -85,6 +88,7 @@ public class OxygenRequestDao {
 			dto.setRequestDate(reqDate);
 			dto.setRequester(displayName);
 			dto.setReqStatus(reqStatus);
+			dto.setUserid(userId);
 			return dto;
 		});
 		return oxygenReqList;
@@ -97,6 +101,28 @@ public class OxygenRequestDao {
 		int  i = jdbcTemplate.update(query,
 				new Object[]{req.getCylinderRequestNo(),req.getRequestId()}
 				);
+		
+		return req;
+	}
+
+	public OxygenRequestPojo updateRequestStats(OxygenRequestPojo req) {
+		String approvalQuery = DaoQueryBuilder.APPROVE_REQUEST_STATUS_BY_ID;
+		String rejectQuery = DaoQueryBuilder.REJECT_REQUEST_STATUS_BY_ID;
+		String reqCompletionQuery = DaoQueryBuilder.COMPLETE_REQUEST_STATUS_BY_ID;
+		
+		
+		String query = ApplicationConstant.REQ_STATUS_APPROVED.equalsIgnoreCase(req.getReqStatus()) 
+				? approvalQuery 
+				:ApplicationConstant.REQ_STATUS_COMPLETE.equalsIgnoreCase(req.getReqStatus()) 
+					?reqCompletionQuery:rejectQuery;
+		
+		int  i = jdbcTemplate.update(query,
+				new Object[]{req.getApprovalRejectionComment(),req.getReqStatus(),req.getRequestId()}
+				);
+		if(i == 0) {
+			req.setDataInserted(false);
+			req.setErrorMsg("No Updation done on this request");
+		}
 		
 		return req;
 	}

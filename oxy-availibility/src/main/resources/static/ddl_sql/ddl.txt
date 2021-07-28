@@ -32,7 +32,21 @@ CREATE TABLE oxy_avail.oaa_authorities (
 );
  
  CREATE UNIQUE INDEX ix_auth_mobileno on oxy_avail.oaa_authorities (oaa_mobileno,oaa_authority);
+ ---------------------------------------------
  
  ALTER TABLE `oxy_avail`.`oau_users` 
 ADD COLUMN `oau_admin_prev_asked` VARCHAR(10) NULL AFTER `enabled`;
+  
+ ALTER TABLE `oxy_avail`.`oar_request` 
+ADD COLUMN `oar_req_approval_date` DATETIME NULL AFTER `oar_rec_end_date`,
+ADD COLUMN `oar_req_stock_incr_cmnt` VARCHAR(500) NULL AFTER `oar_req_approval_date`;
+
+ALTER TABLE `oxy_avail`.`oar_request` 
+ADD COLUMN `oar_req_approval_cmnt` VARCHAR(500) NULL AFTER `oar_req_stock_incr_cmnt`,
+ADD COLUMN `oar_req_rejection_cmnt` VARCHAR(500) NULL AFTER `oar_req_approval_cmnt`;
+
+
+ALTER TABLE `oxy_avail`.`oar_request` 
+ADD COLUMN `oar_req_completion_cmnt` VARCHAR(500) NULL AFTER `oar_req_rejection_cmnt`;
+
   

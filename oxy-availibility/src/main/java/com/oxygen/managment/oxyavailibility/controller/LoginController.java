@@ -28,11 +28,11 @@ public class LoginController {
 	@CrossOrigin
 	@PostMapping("/register_user")
 	@ResponseBody
-	public String registerUser(@RequestBody LoginPojo loginData) {
+	public LoginPojo registerUser(@RequestBody LoginPojo loginData) {
 		
 		System.out.println("inside register user"+loginData); 
-		registationService.registerUser(loginData);
-		return "success";
+		return registationService.registerUser(loginData);
+		 
 	}
 		
 }
