@@ -98,9 +98,17 @@ public class MailUtility {
 		if(ApplicationConstant.REQ_STATUS_APPROVED.equalsIgnoreCase(req.getReqStatus())) {
 			br.append("Your Request (Request id:"+req.getRequestId()+") Has been Approved by System Administrator.")
 			.append("<br>The Approval message by Administrator is:"+req.getApprovalRejectionComment())
+			.append("<br> <b>The standard cylinder of oxygen will be delivered to you. Details provided below:</b>")
+			.append("<br> ")
+			.append("<br> Diameter (in.): 4.3")
+			.append("<br> Height (in.): 25.5")
+			.append("<br> Empty Weight (lb): 7.9")
+			.append("<br> Capacity (L.) at 2200 psi: 680")
+			.append("<br> Regulator Type: CGA 870")
+			.append("<br><br>")
 			 .append("<br> Please Return the cylinder within 7 days of interval")
-			 .append("<br>Penalty Amount would be added in case Cylinders are not returned in Time ")
-			 .append("<br>Thanks and Regards,<br> <br><br>")
+			 .append("<br>Penalty Amount would be added in case Cylinders are not returned in Time.")
+			 .append("<br><br>Thanks and Regards,<br>")
 			 .append("Oxygen Availability Team");
 			 
 			

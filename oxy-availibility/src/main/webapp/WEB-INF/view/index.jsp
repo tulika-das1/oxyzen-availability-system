@@ -801,8 +801,8 @@
                                   <input  type="password" id="re_password_register" class="form-control">
                               </div>
                               
-                               <div class="form-check">
-  								<input class="form-check-input" type="checkbox"  id="admin_req_register">
+                               <div class="form-check" style = "display:none">
+  								<input class="form-check-input" type="checkbox"  id="admin_req_register" >
   								<label class="text-info" for="admin_req_register">
     								Request for admin privilege
   								</label>

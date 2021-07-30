@@ -348,7 +348,7 @@ $(document).ready(function(){
 			return ;
 		}
 		
-		let data = {"name":name,"userId":emailId,"password":password,"askedForAdminRights":adminAccessAsked}
+		let data = {"name":name,"userId":emailId,"password":password,"askedForAdminRights":false}//adminAccessAsked
 		
 		//ajax call
 		$.ajax({

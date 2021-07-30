@@ -39,7 +39,7 @@ $(document)
 									
 									var filteredData = response.filter(function (el) {
 										
-										console.log(el);
+										//console.log(el);
 										if(role==="admin"){
 											return el.reqStatus===NOT_APPROVED_STATUS ;
 										}else{
@@ -95,7 +95,7 @@ $(document)
 										}else if(APPROVED_STATUS ===filteredData[i].reqStatus){
 											status = APPROVED_DISPLAY_STATUS;
 										}
-										let disablebutton = "NAPPR" === filteredData[i].reqStatus ? ""
+										let disablebutton = ("NAPPR" === filteredData[i].reqStatus && "user"===role) ? ""
 												: "disabled";
 										var row = "<tr id="
 												+ filteredData[i].requestId
